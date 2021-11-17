@@ -1,14 +1,26 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { View, Text, Item, Button } from 'react-native'
 import { Card } from 'react-native-elements';
 import styles from './Styles/AboutCardStyles'
+import ExamplesRegistry from '../Services/ExamplesRegistry'
+
+// Ignore in coverage report
+/* istanbul ignore next */
+ExamplesRegistry.addComponentExample('About Card', () =>
+  <AboutCard
+    person={PropTypes.object}
+  />
+)
 
 export class AboutCard extends Component{
+  static propTypes = {
+    person: PropTypes.object
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      data: ["Business", "Management", "Creativity", "Webdesign", "PHP"],
       learnMore: false
     };
     this.toggelLearnMore = this.toggelLearnMore.bind(this)
@@ -30,14 +42,14 @@ export class AboutCard extends Component{
     return (
       <Card>
         <Text style={styles.titleStyle}>About</Text>
-        <Text style={styles.bodyText}>Not so many years ago businesses used to grunt at using illustrations in their marketing materials. But today, the use and influence of illustrations is growing right along. An illustration, image, or picture that does not express a distinct idea is a poor illustration.</Text>
+        <Text style={styles.bodyText}>{this.props.person.about}</Text>
         <View style={styles.skillContainer}>
-          {this.state.data.map((skill, i)=>(
+          {this.props.person.skills.map((skill, i)=>(
             <Text key={i} style={styles.skills}>{skill}</Text>
           ))}
         </View>
         {
-          this.state.learnMore ? (<Text style={styles.bodyText}>More Text, Not sure what more we need</Text>) : null
+          this.state.learnMore ? (<Text style={styles.bodyText}>He's pretty bland, not much more to learn</Text>) : null
         }
         <Card.Divider />
         <Button 

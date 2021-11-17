@@ -1,69 +1,37 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { View, Text, Item, Button } from 'react-native'
 import { Card } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './Styles/RecentActivityCardStyles'
+import ExamplesRegistry from '../Services/ExamplesRegistry'
+
+// Ignore in coverage report
+/* istanbul ignore next */
+ExamplesRegistry.addComponentExample('Recent Activity Card', () =>
+  <RecentActivityCard
+    person={PropTypes.object}
+  />
+)
 
 export class RecentActivityCard extends Component{
+  static propTypes = {
+    person: PropTypes.object
+  }
+  
   constructor(props) {
     super(props);
     this.state = {
-      showAll: false,
-      data: [
-        {
-          "icon": "calendar",
-          "date": "28 February",
-          "details": "Meeting with client"
-        },
-        {
-          "icon": "briefcase",
-          "date": "1 March",
-          "details": "New incoming request"
-        },
-        {
-          "icon": "calendar",
-          "date": "2 March",
-          "details": "Meeting with client"
-        },
-        {
-          "icon": "check-circle",
-          "date": "8 March",
-          "details": "Marked 12 Tasks Done"
-        },
-        {
-          "icon": "briefcase",
-          "date": "13 March",
-          "details": "New incoming request"
-        },
-        {
-          "icon": "credit-card",
-          "date": "16 March",
-          "details": "Payout processed"
-        },
-        {
-          "icon": "briefcase",
-          "date": "20 March",
-          "details": "Marked 12 Tasks Done"
-        }
-      ]
+      showAll: false
     };
-
     this.toggleShowAll = this.toggleShowAll.bind(this)
-  }
-
-  //In Production this would not be used, but the date data is bad, and can't sort at all without a year
-  fixDateData(obj){
-    if (!obj.sortDate)
-      obj.sortDate = obj.date + " 2021"
-    return obj
   }
 
   sortMostRecent(){
     // sort in descending order
-    return this.state.data.sort((first, second)=>{
-      const firstDate = new Date(this.fixDateData(first).sortDate)
-      const secondDate = new Date(this.fixDateData(second).sortDate)
+    return this.props.person.recentActivity.sort((first, second)=>{
+      const firstDate = new Date(first.sortDate)
+      const secondDate = new Date(second.sortDate)
       return secondDate - firstDate 
     })
   }

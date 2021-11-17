@@ -13,20 +13,32 @@ import { ProfileCard } from '../Components/ProfileCard'
 import { AboutCard } from '../Components/AboutCard'
 import { RecentActivityCard } from '../Components/RecentActivityCard'
 import { ScrollView } from 'react-native-gesture-handler'
+import user from '../../api/users/4932.json'
 
 class ProfileScreen extends Component {
-  // constructor (props) {
-  //   super(props)
-  //   this.state = {}
-  // }
+  constructor (props) {
+    super(props)
+    this.state = {
+      user: this.fixDateData(user)
+    }
+  }
+
+  //In Production this would not be used, but the date data is bad, and can't sort at all without a year
+  fixDateData(person){
+    person.recentActivity = person.recentActivity.map(activity=>{
+      activity.sortDate = activity.date + " 2021"
+      return activity
+    })
+    return person
+  }
 
   render () {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <ProfileCard />
-          <AboutCard />
-          <RecentActivityCard />
+          <ProfileCard person={this.state.user}/>
+          <AboutCard person={this.state.user}/>
+          <RecentActivityCard person={this.state.user}/>
         </View>
       </ScrollView>
       )
