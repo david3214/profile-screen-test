@@ -1,11 +1,18 @@
 import React, {Component} from 'react'
-import {ScrollView, Text} from 'react-native'
+import {Text, View} from 'react-native'
+import {SocialMediaBar} from '../Components/SocialMediaBar'
 import {connect} from 'react-redux'
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
 
 // Styles
 import styles from './Styles/ProfileScreenStyle'
+import { Metrics } from '../Themes'
+import { Card } from 'react-native-elements'
+import { ProfileCard } from '../Components/ProfileCard'
+import { AboutCard } from '../Components/AboutCard'
+import { RecentActivityCard } from '../Components/RecentActivityCard'
+import { ScrollView } from 'react-native-gesture-handler'
 
 class ProfileScreen extends Component {
   // constructor (props) {
@@ -15,10 +22,14 @@ class ProfileScreen extends Component {
 
   render () {
     return (
-      <ScrollView style={styles.container}>
-        <Text>ProfileScreen Container</Text>
+      <ScrollView>
+        <View style={styles.container}>
+          <ProfileCard />
+          <AboutCard />
+          <RecentActivityCard />
+        </View>
       </ScrollView>
-    )
+      )
   }
 }
 
