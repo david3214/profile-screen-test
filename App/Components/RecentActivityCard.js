@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { View, Text, Item, Button } from 'react-native'
+import { View, Text, Button, ViewPropTypes } from 'react-native'
 import { Card } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './Styles/RecentActivityCardStyles'
@@ -10,13 +10,14 @@ import ExamplesRegistry from '../Services/ExamplesRegistry'
 /* istanbul ignore next */
 ExamplesRegistry.addComponentExample('Recent Activity Card', () =>
   <RecentActivityCard
-    person={PropTypes.object}
+    recentActivity={[{date: "some Date", icon: 'calendar', details: "meeting with people"}]}
   />
 )
 
 export class RecentActivityCard extends Component{
   static propTypes = {
-    person: PropTypes.object
+    recentActivity: PropTypes.array,
+    cardStyle: ViewPropTypes.style
   }
   
   constructor(props) {
@@ -29,7 +30,7 @@ export class RecentActivityCard extends Component{
 
   sortMostRecent(){
     // sort in descending order
-    return this.props.person.recentActivity.sort((first, second)=>{
+    return this.props.recentActivity.sort((first, second)=>{
       const firstDate = new Date(first.sortDate)
       const secondDate = new Date(second.sortDate)
       return secondDate - firstDate 
@@ -58,7 +59,7 @@ export class RecentActivityCard extends Component{
 
   render(){
     return (
-      <Card>
+      <Card containerStyle={this.props.cardStyle}>
         <Text style={styles.titleStyle}>Recent Activity</Text>
         <View style={styles.container}>
           { this.state.showAll ? this.sortMostRecent().map(this.mapActivities): this.fiveMostRecents().map(this.mapActivities)}

@@ -1,26 +1,32 @@
 import React, {Component} from 'react'
-import {Text, View} from 'react-native'
-import {SocialMediaBar} from '../Components/SocialMediaBar'
+import {View} from 'react-native'
 import {connect} from 'react-redux'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import { create } from 'apisauce'
+import { ScrollView } from 'react-native-gesture-handler'
 
-// Styles
-import styles from './Styles/ProfileScreenStyle'
-import { Metrics } from '../Themes'
-import { Card } from 'react-native-elements'
+// Components
 import { ProfileCard } from '../Components/ProfileCard'
 import { AboutCard } from '../Components/AboutCard'
 import { RecentActivityCard } from '../Components/RecentActivityCard'
-import { ScrollView } from 'react-native-gesture-handler'
-import user from '../../api/users/4932.json'
+import { ProfileHeader } from '../Components/ProfileHeader'
+
+// Styles
+import styles from './Styles/ProfileScreenStyle'
 
 class ProfileScreen extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      user: this.fixDateData(user)
+      user: null
     }
+  }
+
+  componentDidMount(){
+    const api = create({baseURL: 'https://raw.githubusercontent.com'})
+    api.get('/xomly/profile-screen-test/master/api/users/4932.json')
+       .then(req=>{
+          this.setState({user: this.fixDateData(req.data)})
+       })
   }
 
   //In Production this would not be used, but the date data is bad, and can't sort at all without a year
@@ -34,13 +40,35 @@ class ProfileScreen extends Component {
 
   render () {
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <ProfileCard person={this.state.user}/>
-          <AboutCard person={this.state.user}/>
-          <RecentActivityCard person={this.state.user}/>
+      <View style={styles.screenContainer}>
+        { this.state.user ? (
+          <View>
+            <ProfileHeader photoUri={this.state.user.photoUri}/>
+            <ScrollView>
+                <View style={styles.container}>
+                  <ProfileCard
+                    name={this.state.user.name} 
+                    position={this.state.user.position} 
+                    isOnline={this.state.user.isOnline} 
+                    photoUri={this.state.user.picture}
+                    cardStyle={styles.cardStyle}
+                  />
+                  <AboutCard 
+                    about={this.state.user.about}
+                    skills={this.state.user.skills}
+                    cardStyle={styles.cardStyle}
+                  />
+                  <RecentActivityCard 
+                    person={this.state.user} 
+                    cardStyle={styles.cardStyle}
+                    recentActivity={this.state.user.recentActivity}
+                  />
+                </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+        )
+        : null}
+      </View>
       )
   }
 }

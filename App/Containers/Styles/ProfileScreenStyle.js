@@ -6,4 +6,10 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.cloud
   },
+  screenContainer: {
+    marginBottom: Metrics.navBarHeight
+  },  
+  cardStyle: {
+    margin: Metrics.smallMargin
+  }
 })

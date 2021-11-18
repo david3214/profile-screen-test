@@ -1,21 +1,25 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { View, Text, Item, Button } from 'react-native'
+import { View, Text, Item, Button, ViewPropTypes } from 'react-native'
 import { Card } from 'react-native-elements';
-import styles from './Styles/AboutCardStyles'
 import ExamplesRegistry from '../Services/ExamplesRegistry'
+
+import styles from './Styles/AboutCardStyles'
 
 // Ignore in coverage report
 /* istanbul ignore next */
 ExamplesRegistry.addComponentExample('About Card', () =>
   <AboutCard
-    person={PropTypes.object}
+    about='Info on the person'
+    skills={['Business', 'PHP', 'etc']}
   />
 )
 
 export class AboutCard extends Component{
   static propTypes = {
-    person: PropTypes.object
+    about: PropTypes.string,
+    skills: PropTypes.array,
+    cardStyle: ViewPropTypes.style
   }
 
   constructor(props) {
@@ -32,19 +36,13 @@ export class AboutCard extends Component{
     })
   }
 
-  renderItems({item}){
-    return(
-      <Item title={item.title}/>
-    )
-  }
-
   render(){
     return (
-      <Card>
+      <Card containerStyle={this.props.cardStyle}>
         <Text style={styles.titleStyle}>About</Text>
-        <Text style={styles.bodyText}>{this.props.person.about}</Text>
+        <Text style={styles.bodyText}>{this.props.about}</Text>
         <View style={styles.skillContainer}>
-          {this.props.person.skills.map((skill, i)=>(
+          {this.props.skills?.map((skill, i)=>(
             <Text key={i} style={styles.skills}>{skill}</Text>
           ))}
         </View>
